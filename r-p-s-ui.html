@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Page Title</title>
+  <meta charset="UTF-8"/>
+  <link rel="stylesheet" href="rps.css">
+</head>
+
+<body>
+  <h1>Choose: Rock, Paper or Scissors</h1>
+  <div class="buttons">
+    <button type="button" class="rock">Rock</button>
+    <button type="button" class="paper">Paper</button>
+    <button type="button" class="scissors">Scissors</button>
+  </div>
+
+  <div class="scoreboard">
+    <div class="result"></div>
+    <div class="score"></div>
+    <div class="winner"></div>
+  </div>
+
+  <script>
+    
+    // this function will randomly choose rock, paper or scissors
+    function computerPlay () {
+      // random choice: rock, paper, scissors: random math
+      const myArray = ["Rock", "Paper", "Scissors"];
+      const randomChoice = myArray[Math.floor(Math.random()*myArray.length)];
+      return randomChoice;
+    }
+    
+    // variables to keep score
+    let scorePlayer = 0;
+    let scoreComputer = 0;
+    let roundsPlayed = 0;
+   
+    // this function plays the round
+    function playRound (playerSelection, computerSelection) {
+      if(playerSelection.toLowerCase() == "rock" && computerSelection.toLowerCase() == "paper") {
+          scoreComputer++;
+          return "You Lose! Paper beats Rock";
+      } else if(playerSelection.toLowerCase() == "rock" && computerSelection.toLowerCase() == "scissors") {
+          scorePlayer++;
+          return "You Win! Rock beats Scissors";
+      } else if(playerSelection.toLowerCase() == "rock" && computerSelection.toLowerCase() == "rock") {
+          return "It is a tie!";
+      } else if(playerSelection.toLowerCase() == "paper" && computerSelection.toLowerCase() == "scissors") {
+          scoreComputer++;
+          return "You Lose! Scissors beats Paper";
+      } else if(playerSelection.toLowerCase() == "paper" && computerSelection.toLowerCase() == "rock") {
+          scorePlayer++;
+          return "You Win! Paper beats Rock";
+      } else if(playerSelection.toLowerCase() == "paper" && computerSelection.toLowerCase() == "paper") {
+          return "It is a tie!";
+      } else if(playerSelection.toLowerCase() == "scissors" && computerSelection.toLowerCase() == "scissors") {
+          return "It is a tie";
+      } else if(playerSelection.toLowerCase() == "scissors" && computerSelection.toLowerCase() == "rock") {
+          scoreComputer++;
+          return "You Lose! Rock beats Scissors";
+      } else if(playerSelection.toLowerCase() == "scissors" && computerSelection.toLowerCase() == "paper") {
+          scorePlayer++;
+          return "You Win! Scissors beats Paper";
+      }
+      } 
+
+
+      // function game play 5 rounds and keep score
+      function game() {
+          if(roundsPlayed == 4 && scorePlayer > scoreComputer) {
+            divWinner.textContent = `You win the Game! The score was ${scorePlayer} to ${scoreComputer}`;
+            document.querySelector('.rock').disabled = true;
+            document.querySelector('.paper').disabled = true;
+            document.querySelector('.scissors').disabled = true;
+            restartDiv.appendChild(restartButton);
+          } else if(roundsPlayed == 4 && scorePlayer < scoreComputer) {
+            divWinner.textContent = `You Lose the Game! The score was ${scorePlayer} to ${scoreComputer}`;
+            document.querySelector('.rock').disabled = true;
+            document.querySelector('.paper').disabled = true;
+            document.querySelector('.scissors').disabled = true;
+            restartDiv.appendChild(restartButton);
+          } else if(roundsPlayed == 4) {
+            divWinner.textContent = `no one won`; 
+            document.querySelector('.rock').disabled = true;
+            document.querySelector('.paper').disabled = true;
+            document.querySelector('.scissors').disabled = true;
+            restartDiv.appendChild(restartButton);
+          } else {
+            return;
+          }
+        }
+      
+      function restartGame() {
+        console.log("the game will be restarted");
+        divResult.textContent = "";
+        divScore.textContent = "";
+        divWinner.textContent = "";
+        scorePlayer = 0;
+        scoreComputer = 0;
+        roundsPlayed = 0;
+        document.querySelector('.rock').disabled = false;
+        document.querySelector('.paper').disabled = false;
+        document.querySelector('.scissors').disabled = false;
+      }
+
+      const btn = document.querySelectorAll('button');
+      const divResult = document.querySelector('.result');
+      const divScore = document.querySelector('.score');
+      const divWinner = document.querySelector('.winner');
+      
+      const restartDiv = document.createElement('div');
+      restartDiv.classList.add('restartbutton');
+      const restartButton = document.createElement('button');
+      //restartButton.setAttribute("id", 'restart');
+      //restartButton.classList.add('restart');
+      restartButton.textContent = 'Restart';
+      document.body.appendChild(restartDiv);
+
+      btn.forEach((button) => {
+        button.addEventListener('click', function(e){
+          playerSelection = this.className;
+          computerSelection = computerPlay();
+          divResult.textContent = playRound(playerSelection, computerSelection);
+          divScore.textContent = `your score: ${scorePlayer} computers score: ${scoreComputer}`;
+          game();
+          roundsPlayed++;
+        });
+
+      });
+
+      restartButton.addEventListener('click', restartGame);
+
+      
+  </script>
+</body>
+
+</html>
